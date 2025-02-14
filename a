@@ -1,0 +1,107 @@
+-- Laadscherm weergeven
+local ScreenGui = Instance.new("ScreenGui")
+local LoadingFrame = Instance.new("Frame")
+local LoadingLabel = Instance.new("TextLabel")
+local MadeByLabel = Instance.new("TextLabel")
+local LoadingBarFrame = Instance.new("Frame")
+local LoadingBar = Instance.new("Frame")
+
+-- Parent de GUI-elementen
+ScreenGui.Parent = game.CoreGui
+LoadingFrame.Parent = ScreenGui
+LoadingLabel.Parent = LoadingFrame
+MadeByLabel.Parent = LoadingFrame
+LoadingBarFrame.Parent = LoadingFrame
+LoadingBar.Parent = LoadingBarFrame
+
+-- Instellingen voor laadscherm
+LoadingFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+LoadingFrame.Position = UDim2.new(0.5, -200, 0.5, -50)
+LoadingFrame.Size = UDim2.new(0, 400, 0, 150)
+
+LoadingLabel.Text = "script loading"
+LoadingLabel.TextColor3 = Color3.new(1, 1, 1)
+LoadingLabel.Position = UDim2.new(0.5, -150, 0, 10)
+LoadingLabel.Size = UDim2.new(0, 300, 0, 50)
+LoadingLabel.TextScaled = true
+LoadingLabel.Font = Enum.Font.GothamBold
+
+MadeByLabel.Text = "made by wormscriptzz"
+MadeByLabel.TextColor3 = Color3.new(1, 1, 1)
+MadeByLabel.Position = UDim2.new(0.5, -150, 0, 60)
+MadeByLabel.Size = UDim2.new(0, 300, 0, 30)
+MadeByLabel.TextScaled = true
+MadeByLabel.Font = Enum.Font.Gotham
+MadeByLabel.TextSize = 14
+
+LoadingBarFrame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+LoadingBarFrame.Position = UDim2.new(0.5, -150, 0, 100)
+LoadingBarFrame.Size = UDim2.new(0, 300, 0, 20)
+local LoadingBarFrameCorner = Instance.new("UICorner", LoadingBarFrame)
+LoadingBarFrameCorner.CornerRadius = UDim.new(0, 10)
+
+LoadingBar.BackgroundColor3 = Color3.new(0, 0.6, 0)
+LoadingBar.Size = UDim2.new(0, 0, 1, 0)
+local LoadingBarCorner = Instance.new("UICorner", LoadingBar)
+LoadingBarCorner.CornerRadius = UDim.new(0, 10)
+
+-- Laadbalk animeren
+for i = 1, 10 do
+    wait(1)
+    LoadingBar.Size = UDim2.new(i * 0.1, 0, 1, 0)
+end
+
+-- Laadscherm verwijderen
+LoadingFrame:Destroy()
+
+-- Admin panel weergeven
+local AdminPanelFrame = Instance.new("Frame")
+local AdminPanelTitle = Instance.new("TextLabel")
+local FlyToggleButton = Instance.new("TextButton")
+
+AdminPanelFrame.Parent = ScreenGui
+AdminPanelTitle.Parent = AdminPanelFrame
+FlyToggleButton.Parent = AdminPanelFrame
+
+AdminPanelFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+AdminPanelFrame.Position = UDim2.new(0.5, -200, 0.5, -200)
+AdminPanelFrame.Size = UDim2.new(0, 400, 0, 400)
+AdminPanelFrame.Active = true
+AdminPanelFrame.Draggable = true
+
+AdminPanelTitle.Text = "wormscriptzz's admin panel"
+AdminPanelTitle.TextColor3 = Color3.new(1, 1, 1)
+AdminPanelTitle.Position = UDim2.new(0.5, -150, 0, 10)
+AdminPanelTitle.Size = UDim2.new(0, 300, 0, 50)
+AdminPanelTitle.TextScaled = true
+AdminPanelTitle.Font = Enum.Font.GothamBold
+
+FlyToggleButton.BackgroundColor3 = Color3.fromRGB(76, 175, 80)
+FlyToggleButton.Position = UDim2.new(0.5, -75, 0.5, -25)
+FlyToggleButton.Size = UDim2.new(0, 150, 0, 50)
+FlyToggleButton.Text = "fly: OFF"
+FlyToggleButton.TextColor3 = Color3.new(1, 1, 1)
+FlyToggleButton.TextScaled = true
+FlyToggleButton.Font = Enum.Font.GothamBold
+
+-- Vlieg functionaliteit
+local flying = false
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+FlyToggleButton.MouseButton1Click:Connect(function()
+    flying = not flying
+    FlyToggleButton.Text = flying and "fly: ON" or "fly: OFF"
+
+    if flying then
+        -- Activeer vliegen
+        local bodyVelocity = Instance.new("BodyVelocity", character.HumanoidRootPart)
+        bodyVelocity.Velocity = Vector3.new(0, 50, 0)
+        bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+    else
+        -- Deactiveer vliegen
+        if character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+            character.HumanoidRootPart.BodyVelocity:Destroy()
+        end
+    end
+end)
